@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>wq_racGet</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>CodeBlock</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/**
+     *  &lt;#content#&gt;
+     */
+    &lt;#content#&gt; = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(NSString *str) {
+        
+        RACSignal *requestSignal = [RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+            APIManager *apiManager = [[APIManager alloc] init];
+            [apiManager httpGetRequestWithURL:&lt;#content#&gt; success:^(NSURLSessionDataTask *task, id json) {
+                [subscriber sendNext:json];
+                AFLog(@"json = %@",json);
+                [subscriber sendCompleted];
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                [subscriber sendError:error];
+
+            }];
+            return nil;
+        }];
+        // 在返回数据信号时，把数据中的字典映射成模型信号，传递出去
+        return [requestSignal map:^id(NSDictionary *value) {
+            
+            return value;
+        }];
+   }];</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>340F8C00-3D01-4F60-8A18-AB14158EA55C</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>wq_RACGetCommand</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

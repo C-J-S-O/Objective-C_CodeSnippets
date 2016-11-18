@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>wq_racPost</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>CodeBlock</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>/**
+        &lt;#content#&gt;
+     */
+    &lt;#content#&gt; = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+        RACSignal *requestSignal = [RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+//            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{@"phone":self.userPhone,@"captcha":self.captcha,@"password":[[NSString md5:self.userPassword] uppercaseString]}];
+            
+            APIManager *apiManager = [[APIManager alloc] init];
+            
+            [apiManager httpPostRequestWithURL:&lt;#content#&gt; thePostBodyWithDictionary:&lt;#content#&gt; isJSONRequset:&lt;#content#&gt; success:^(NSURLSessionDataTask *task, id json) {
+                [subscriber sendNext:json];
+                AFLog(@"json = %@",json);
+                [subscriber sendCompleted];
+                
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                
+                [subscriber sendError:error];
+            }];
+            return nil;
+        }];
+        // 在返回数据信号时，把数据中的字典映射成模型信号，传递出去
+        return [requestSignal map:^id(NSDictionary *value) {
+            
+            AFLog(@"%@",value);
+            
+            AFLog(@"%@",value);
+            if ([value[@"code"] integerValue] == 500) {
+                [WSProgressHUD showErrorWithStatus:value[@"message"]];
+            }else
+            {
+                [WSProgressHUD showSuccessWithStatus:@"设置成功"];
+            }
+            return value;
+        }];
+    }];</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>5AECEE51-367E-4110-8ED8-ECB5508C16FE</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.Objective-C</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>wq_RACPostCommand</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>
